@@ -1,0 +1,9 @@
+.vs_code/
+.git/
+node_modules/
+static/*
+
+!static/README.md
+
+.DS_Store
+*.log
