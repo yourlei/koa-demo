@@ -21,21 +21,23 @@ module.exports = {
         type: STRING,
         validate: {
             isEmail: true,
-            allowNull: false,
+            // allowNull: false,
         }
     },
     mobile: {
         type: STRING,
         validate: {
-            allowNull: false,
+            // allowNull: false,
             len: 11
         }
     },
     created_at: {
         type: DATE,
+        defaultValue: Date.now()
     },
     updated_at: {
-        type: DATE
+        type: DATE,
+        defaultValue: Date.now()
     },
     deleted_at: {
         type: DATE,

@@ -10,5 +10,6 @@ router.get("/", (ctx) => {
 })
 
 router.post("/user", user.create)
+router.get("/user", user.index)
 
 module.exports = router

@@ -2,6 +2,8 @@
 /**
  * 自定义App#context对象的扩展方法
  */
+const errCode = require("../utils/errMap").errCode
+const errMap = require("../utils/errMap").errMap
 module.exports = {
     /**
      * @name validate
@@ -47,7 +49,7 @@ module.exports = {
             const item = rules[key]
             const _type = item.type
             // 字段值默认允许为空
-            const _isNull = item.hasOwnProperty("isNull") ? item.isNull : true
+            const _empty = item.hasOwnProperty("empty") ? item.empty : true
             // 默认为可选字段
             const _required = item.required || false
             const _minLength = item.minLength || 0
@@ -86,7 +88,7 @@ module.exports = {
                     return response(1, msg)
                 }
                 // 是否允许为空值
-                if (!_isNull && !_val.length) {
+                if (!_empty && !_val.length) {
                     return response(1, `${key}参数值不能为空`)
                 }
                 // 若为字符串或是数组,检查最大, 最小长度范围
@@ -102,6 +104,22 @@ module.exports = {
             
         }
         return response()
+    },
+    /**
+     * 格式化接口返回的数据
+     * @param {int} code, 错误码
+     * @param {string} msg, 错误提示信息
+     * @param {*} data, 返回的数据
+     */
+    outputJson: (code=0, msg="", data) => {
+        if (code) {
+            msg = errMap[code]
+        }
+        
+        if (data) {
+            return {code, msg, data}
+        }
+        return {code, msg}
     }
 }
 /**

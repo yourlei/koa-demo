@@ -47,7 +47,10 @@ Object.keys(models).forEach(name => {
 app.context.model = sequelize.models
 // context validate
 app.context.validate = extend.validate
+app.context.outputJson = extend.outputJson
 
 app.listen("8080", () => {
     console.log("server is running...")
 })
+
+module.exports = app
