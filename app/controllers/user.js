@@ -20,7 +20,8 @@
         const rules = {
             name: {"type": "string"},
             email: {"type": "email", required: true},
-            mobile: {"type": "string", required: true}
+            mobile: {"type": "string", required: true, minLength: 11},
+            roleId: {"type": "array"}
         }
         const validateInfo = ctx.validate(rules, body)
         if (validateInfo.code) {
