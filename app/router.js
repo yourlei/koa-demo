@@ -1,12 +1,14 @@
+"use strict"
 const router = require("koa-router")()
 const user = require("./controllers/user")
 
-
+/**
+ * 定义项目api
+ */
 router.get("/", (ctx) => {
     ctx.body = "hi, koa"
 })
 
-// console.log(user.create(), "....")
 router.post("/user", user.create)
 
 module.exports = router

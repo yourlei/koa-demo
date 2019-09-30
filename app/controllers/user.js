@@ -16,8 +16,17 @@
      */
     static async create(ctx, next) {
         const body = ctx.request.body
-        const rows = await ctx.model.user.findAll()
-        console.log(rows, "....")
+        // 接受的body参数
+        const rules = {
+            name: {"type": "string"},
+            email: {"type": "email", required: true},
+            mobile: {"type": "string", required: true}
+        }
+        const validateInfo = ctx.validate(rules, body)
+        if (validateInfo.code) {
+            ctx.body = validateInfo
+            return 
+        }
         ctx.body = "hello koa"
     }
  }

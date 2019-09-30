@@ -5,6 +5,7 @@ const bodyParse = require("koa-bodyparser")
 const router = require("./app/router")
 const Sequelize = require("sequelize")
 const models = require("./app/model")
+const extend = require("./app/extend/context")
 const config = require("./config/config.default")
 const {
     host,
@@ -44,6 +45,8 @@ Object.keys(models).forEach(name => {
 })
 // sequelize model挂载到app#context
 app.context.model = sequelize.models
+// context validate
+app.context.validate = extend.validate
 
 app.listen("8080", () => {
     console.log("server is running...")
