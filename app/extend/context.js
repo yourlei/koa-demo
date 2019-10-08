@@ -117,9 +117,65 @@ module.exports = {
         }
         
         if (data) {
-            return {code, msg, data}
+            return {code, msg, data: data}
         }
         return {code, msg}
+    },
+    /**
+     * 应用于controller层完成http请求参数的验证
+     * 解析http传递的参数(包括GET,POST,DELETE), 并执行参数验证
+     * @param ctx, <Application#Context> koa上下文对象
+     * @param rules, object, 参数验证规则
+     * 
+     * @return object, code非零时表示验证不通过, 验证通过时返回payload
+     * ```js
+     * {
+     *    code: 0,
+     *    msg: "",
+     *    payload?: {}
+     * }
+     * ```
+     */
+    parseHttpPayload: (ctx, rules) => {
+        const method = ctx.method.toLowerCase()
+        // 初始化返回对象数据
+        let payload = {}
+        let code = 0
+        let msg = ""
+        
+        if ("get" === method) {
+            const query = Object.assign({}, ctx.query)
+            // 查询对象带有query
+            if (query.hasOwnProperty("query")) {
+                try {
+                    payload = JSON.parse(query.query)
+                } catch(error) {
+                    code = 1
+                    msg = "json解析错误"
+                    // TODO 写入日志文件
+                    console.error(JSON.stringify(error))
+                }
+            }
+        } else if ("post" === method) {
+            payload = ctx.body
+        }
+        // http参数解析时发生异常
+        if (code) {
+            return {
+                code,
+                msg
+            }
+        }
+        // 验证参数是否符合满足验证规则
+        const validate = ctx.validate(rules, payload)
+        if (validate.code) {
+            return validate
+        }
+        // 参数验证通过, 返回解析结果
+        return {
+            code,
+            data: payload
+        }
     }
 }
 /**

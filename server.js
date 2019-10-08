@@ -48,6 +48,7 @@ app.context.model = sequelize.models
 // context validate
 app.context.validate = extend.validate
 app.context.outputJson = extend.outputJson
+app.context.parseHttpPayload = extend.parseHttpPayload
 
 app.listen("8080", () => {
     console.log("server is running...")

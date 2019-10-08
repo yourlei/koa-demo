@@ -16,19 +16,19 @@ const errCode = require("../utils/errMap").errCode
      * @param {*} next 
      */
     static async create(ctx, next) {
-        const body = ctx.request.body
+        // const body = ctx.request.body
         // 接受的body参数
         const rules = {
             name: {"type": "string", required: true, minLength: 1},
             email: {"type": "email", required: true},
             mobile: {"type": "string", required: true, minLength: 10},
         }
-        const validateInfo = ctx.validate(rules, body)
-        if (validateInfo.code) {
-            ctx.body = validateInfo
-            return 
+        const payload = ctx.parseHttpPayload(ctx, rules)
+        if (payload.code) {
+            return payload
         }
-        const flag = await UserService.create(ctx, body)
+        // flag: bool type, if user mobile or email had existed,return false, else true
+        const flag = await UserService.create(ctx, payload.data)
         const code = flag ? 0 : errCode["exist_mobile_email"]
         ctx.body = ctx.outputJson(code)
     }
@@ -38,21 +38,21 @@ const errCode = require("../utils/errMap").errCode
      * @param {*} next 
      */
     static async index(ctx, next) {
-        const query = Object.assign({}, ctx.request.query)
         const rules = {
-            offset: {type: "string", required: true},
-            limit: {type: "string", required: true},
-            name: {type: "string"}
+            offset: {type: "number", required: true},
+            limit: {type: "number", required: true},
+            name: {type: "string"},
+            email: {type: "string"}
         }
-        console.log(query, "=====")
-        const validateInfo = ctx.validate(rules, query)
-        if (validateInfo.code) {
-            ctx.body = validateInfo
+
+        const payload = ctx.parseHttpPayload(ctx, rules)
+        if (payload.code) {
+            ctx.body = payload
             return 
         }
-        const result = await UserService.index(ctx, query)
+        const result = await UserService.index(ctx, payload.data)
         
-        ctx.body = ctx.outputJson(code, msg, result)
+        ctx.body = ctx.outputJson(0, "", result)
     }
  }
 

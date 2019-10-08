@@ -57,16 +57,17 @@ class UserService {
         const rows = await ctx.model.user.findAll({
             where: {
                 name: {
-                    [Op.like]: `${name}`
+                    [Op.like]: `%${name}%`
                 }
             },
             offset,
             limit,
-        }).then( result => {
-            console.log(result)
+        }).then( data => {
+            console.log(data)
+            return data
         })
         
-
+        return rows
     }
 }
 
