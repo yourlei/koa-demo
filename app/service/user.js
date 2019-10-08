@@ -134,7 +134,12 @@ class UserService {
      * @return object
      */
     static async show(ctx, id) {
-        const user = await ctx.model.user.findByPk(id)
+        const user = await ctx.model.user.findOne({
+            where: {
+                id: id,
+                deleted_at: utils.deletedAt
+            }
+        })
 
         if (!user) {
             let code = errCode["NOT_FOUND"]

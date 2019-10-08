@@ -16,8 +16,6 @@ exports.mysql = {
     db: "koa",
     passwd: "scut2019",
 }
-
-
 /** 
  * 静态文件配置
  * @param path {string} 静态文件所在目录
@@ -25,3 +23,7 @@ exports.mysql = {
 exports.static = {
     path: path.resolve(__dirname, "../static")
 }
+/**
+ * api version
+ */
+exports.apiVersion = "/api/v1"
