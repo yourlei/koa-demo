@@ -111,15 +111,22 @@ module.exports = {
      * @param {string} msg, 错误提示信息
      * @param {*} data, 返回的数据
      */
-    outputJson: (code=0, msg="", data) => {
+    outputJson: (code=0, msg="", data, total) => {
         if (code) {
             msg = errMap[code]
         }
-        
-        if (data) {
+        let res = {
+            code,
+            msg
+        }
+
+        if (data && total) {
+            Object.assign(res, {data, total})
+        } else if (data) {
             return {code, msg, data: data}
         }
-        return {code, msg}
+
+        return res
     },
     /**
      * 应用于controller层完成http请求参数的验证
@@ -142,7 +149,7 @@ module.exports = {
         let payload = {}
         let code = 0
         let msg = ""
-        
+        // 按请求方法提取http传递的数据
         if ("get" === method) {
             const query = Object.assign({}, ctx.query)
             // 查询对象带有query
@@ -156,8 +163,8 @@ module.exports = {
                     console.error(JSON.stringify(error))
                 }
             }
-        } else if ("post" === method) {
-            payload = ctx.body
+        } else if ("post" === method || "put" === method) {
+            payload = ctx.request.body
         }
         // http参数解析时发生异常
         if (code) {

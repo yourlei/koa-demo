@@ -16,8 +16,8 @@ const errCode = require("../utils/errMap").errCode
      * @param {*} next 
      */
     static async create(ctx, next) {
-        // const body = ctx.request.body
-        // 接受的body参数
+        console.log("user create...")
+        // body参数验证规则
         const rules = {
             name: {"type": "string", required: true, minLength: 1},
             email: {"type": "email", required: true},
@@ -25,12 +25,11 @@ const errCode = require("../utils/errMap").errCode
         }
         const payload = ctx.parseHttpPayload(ctx, rules)
         if (payload.code) {
-            return payload
+            return ctx.body = payload
         }
         // flag: bool type, if user mobile or email had existed,return false, else true
-        const flag = await UserService.create(ctx, payload.data)
-        const code = flag ? 0 : errCode["exist_mobile_email"]
-        ctx.body = ctx.outputJson(code)
+        ctx.body = await UserService.create(ctx, payload.data)
+        
     }
     /**
      * 查询用户列表
@@ -52,7 +51,40 @@ const errCode = require("../utils/errMap").errCode
         }
         const result = await UserService.index(ctx, payload.data)
         
-        ctx.body = ctx.outputJson(0, "", result)
+        ctx.body = ctx.outputJson(0, "", result.rows, result.count)
+    }
+    /**
+     * @desc 编辑用户
+     * @param {App#context} ctx 
+     */
+    static async edit(ctx, next) {
+        const rules = {
+            name: {type: "string"},
+            email: {type: "string"}
+        }
+        const payload = ctx.parseHttpPayload(ctx, rules)
+        if (payload.code) {
+            ctx.body = payload
+            return 
+        }
+        const code = await UserService.edit(ctx, ctx.params.id, payload.data)
+        
+        ctx.body = ctx.outputJson(code, "")
+    }
+    /**
+     * @desc 用户详情
+     * @param {App#context} ctx 
+     */
+    static async show(ctx, next) {
+        ctx.body = await UserService.show(ctx, ctx.params.id)
+    }
+    /**
+     * @desc 删除用户
+     * @param {Application#context} ctx 
+     * @param {*} next 
+     */
+    static async destory(ctx, next) {
+        ctx.body = await UserService.destory(ctx, ctx.params.id)
     }
  }
 

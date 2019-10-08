@@ -15,13 +15,17 @@ const {
     port
 } = config.mysql
 
-const sequelize = new Sequelize(`mysql://${user}:${passwd}@${host}:${port}/${db}`, {
+// 参考文档: https://sequelize.org/master/manual/getting-started.html#installing
+const sequelize = new Sequelize(db, user, passwd, {
+    host: host,
+    dialect: 'mysql',
+    dialectOptions: {connectTimeout: 1000},
     define: {
-      // `timestamps` 字段指定是否将创建 `createdAt` 和 `updatedAt` 字段.
-      // 该值默认为 true, 但是当前设定为 false
-      timestamps: false
-    }
-})
+        timestamps: false // Model中默认添加createdAt, updatedAt字段, 设为false不添加这两个字段
+    },
+    timezone: "+08:00"
+    // timezone: "Asia/Shanghai"
+  })
 const app = new Koa()
 // bodyparse
 app.use(bodyParse())
