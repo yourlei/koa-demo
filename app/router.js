@@ -8,7 +8,9 @@ const user = require("./controllers/user")
 router.get("/", (ctx) => {
     ctx.body = "hi, koa"
 })
-
+/**
+ * 实现用户模块的增删改查操作
+ */
 router.post("/user", user.create)
 router.get("/user", user.index)
 router.put("/user/:id", user.edit)

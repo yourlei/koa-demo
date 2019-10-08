@@ -22,13 +22,11 @@ module.exports = {
         type: STRING,
         validate: {
             isEmail: true,
-            // allowNull: false,
         }
     },
     mobile: {
         type: STRING,
         validate: {
-            // allowNull: false,
             len: 11
         }
     },

@@ -49,7 +49,7 @@ Object.keys(models).forEach(name => {
 })
 // sequelize model挂载到app#context
 app.context.model = sequelize.models
-// context validate
+// 将自定义的扩展方法添加到context对象
 app.context.validate = extend.validate
 app.context.outputJson = extend.outputJson
 app.context.parseHttpPayload = extend.parseHttpPayload
