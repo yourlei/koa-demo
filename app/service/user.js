@@ -76,6 +76,7 @@ class UserService {
             where,
             offset,
             limit,
+            attributes: ["id", "name", "email", "mobile", "created_at", "updated_at"]
         })
         
         return result
@@ -138,7 +139,8 @@ class UserService {
             where: {
                 id: id,
                 deleted_at: utils.deletedAt
-            }
+            },
+            attributes: ["id", "name", "email", "mobile", "created_at", "updated_at"]         
         })
 
         if (!user) {

@@ -16,7 +16,6 @@ const errCode = require("../utils/errMap").errCode
      * @param {*} next 
      */
     static async create(ctx, next) {
-        console.log("user create...")
         // body参数验证规则
         const rules = {
             name: {"type": "string", required: true, minLength: 1},
