@@ -1,5 +1,4 @@
 const Koa = require("koa")
-const Router = require("koa-router")
 const koaStatic = require("koa-static")
 const bodyParse = require("koa-bodyparser")
 const router = require("./app/router")
